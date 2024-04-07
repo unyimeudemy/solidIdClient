@@ -6,9 +6,8 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import PersonIcon from '@mui/icons-material/Person';
 import {useNavigate} from "react-router-dom";
 import {  useSelector } from 'react-redux';
-
-
-export const Header = () => {
+import {useLocation} from "react-router-dom"
+import { SolidIDLogo } from './SolidIDLogo';
 
 const Container = styled.div`
     height: 70px;
@@ -19,14 +18,7 @@ const Container = styled.div`
     /* align-items: flex-start; */
 `
 
-const Logo = styled.div`
-  color: #31363F;
-  font-size: 50px;
-  font-weight: 900;
-  margin-left: 60px;
-  cursor: pointer;
- 
-  `
+
 
 const Tabs = styled.div`
     width: 40%;
@@ -75,6 +67,29 @@ const ProfileButton = styled.button`
   gap: 5px;
 `
 
+const SignOutButton = styled.button`
+  border-radius: 10px;
+  width: 120px;
+  height: 40px;
+  color: #426e70;
+  padding: 5px 15px;
+  background-color: #EEEE;
+  border: 1px solid #426e70;
+  font-weight: 600;
+  font-size: medium;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+
+  /* :hover {
+    cursor: pointer;
+    background-color: #426e70;
+    color: #EEEE;
+  } */
+`
+
 const Txt = styled.div`
 width: 100%;
 /* height: 100%; */
@@ -87,7 +102,7 @@ const SignInButton = styled.button`
   color: #426e70;
   padding: 5px 15px;
   background-color: #EEEE;
-  border: 1px solid #426e70;
+  border: 2px solid #426e70;
   font-weight: 600;
   font-size: medium;
   text-align: center;
@@ -102,17 +117,20 @@ cursor: pointer;
     background-color: #426e70;
     color: #EEEE;
   }
-
-
 `
+
+export const Header = () => {
+
 
 const navigate = useNavigate();
 const {currentUser} = useSelector((state) => state.user);
 
+const location = useLocation();
 
   return (
     <Container>
-        <Logo onClick={() => navigate("/")}>SOLID ID</Logo>
+        <> 
+        <SolidIDLogo/>
         <Tabs>
             <Tab>
             <SupportAgentIcon  htmlColor='#263f40'/> 
@@ -126,15 +144,25 @@ const {currentUser} = useSelector((state) => state.user);
         <GroupsIcon  htmlColor='#263f40'/>
         <Text>Partners</Text>
         </Tab>
-        {currentUser ? <ProfileButton onClick={() => navigate(`/profile`)}>
-            <PersonIcon/>
-            <Txt>Profile</Txt>
-        </ProfileButton> :
-        <SignInButton
-        onClick={() => navigate(`/sign_in`)}
-        >Sign in</SignInButton>
-        }
+        {currentUser != null ? (
+          location.pathname === "/profile" ? (
+            <SignOutButton
+            onClick={() => navigate("/log_out")}
+            >Sign out</SignOutButton>
+          ) : (
+            <ProfileButton onClick={() => navigate(`/profile`)}>
+              <PersonIcon />
+              <Txt>Profile</Txt>
+            </ProfileButton>
+          )
+        ) : (
+          <SignInButton onClick={() => navigate(`/sign_in`)}>
+            Sign in
+          </SignInButton>
+         )}
+        
         </Tabs>
+        </>
     </Container>
   )
 }

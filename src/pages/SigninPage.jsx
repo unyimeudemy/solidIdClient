@@ -6,7 +6,20 @@ import Axios from '../lib/api/axios';
 import {  useDispatch, useSelector } from 'react-redux';
 import { loginFailure, loginStart, loginSuccess } from "../redux/slices/userSlice.js";
 import { getUserProfile } from '../lib/getUserProfile.js';
+import { SolidIDLogo } from '../components/SolidIDLogo.jsx';
+import styled from "styled-components";
+import InfoIcon from '@mui/icons-material/Info';
 
+
+
+const OrgSigUpLink = styled.div`
+color: #31363F;
+display: flex;
+font-weight: 600;
+text-decoration: underline;
+margin-top: 20px;
+cursor: pointer;
+`
 
 export const SigninPage = () => {
 
@@ -47,7 +60,7 @@ export const SigninPage = () => {
     return (
         <Wrapper>
             <Container>
-                <Logo><div>SOLID ID</div></Logo>
+                <SolidIDLogo/>
                 <Title>Sign in</Title>
                 <>
                 <Input
@@ -69,6 +82,12 @@ export const SigninPage = () => {
                     </Button>
                 </Buttons>
             </Container>
+            <OrgSigUpLink
+        onClick={() => navigate("/org_sign_in")}
+        >
+            <InfoIcon/>
+            <div>Click here to sign up as an organization</div>
+        </OrgSigUpLink>
         </Wrapper>
       )
 }

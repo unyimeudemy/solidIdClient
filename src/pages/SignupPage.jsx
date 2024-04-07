@@ -4,6 +4,17 @@ import { Button, Buttons, Container, Input, Logo, Title, Wrapper } from '../Styl
 import { useNavigate } from 'react-router-dom';
 import Axios from '../lib/api/axios';
 import Cookies from 'js-cookie';
+import { SolidIDLogo } from '../components/SolidIDLogo';
+import InfoIcon from '@mui/icons-material/Info';
+
+const OrgSigUpLink = styled.div`
+color: #31363F;
+display: flex;
+font-weight: 600;
+text-decoration: underline;
+margin-top: 20px;
+cursor: pointer;
+`
 
 export const SignupPage = () => {
     const [slide, setSlide] = useState(1);
@@ -57,7 +68,7 @@ export const SignupPage = () => {
   return (
     <Wrapper>
         <Container>
-            <Logo><div>SOLID ID</div></Logo>
+            <SolidIDLogo/>
             <Title>Sign up</Title>
             { slide === 1 && <>
             <Input
@@ -112,6 +123,7 @@ export const SignupPage = () => {
             onChange={(e) => {setStateOfOrigin(e.target.value)}}
             />
             </>}
+
             {slide === 1 && <Buttons>
                 <Button
                 onClick={() => {navigate("/sign_in")}}
@@ -152,6 +164,12 @@ export const SignupPage = () => {
             </Buttons>
             }
         </Container>
+        <OrgSigUpLink
+        onClick={() => navigate("/org_sign_up")}
+        >
+            <InfoIcon/>
+            <div>Click here to sign up as an organization</div>
+        </OrgSigUpLink>
     </Wrapper>
   )
 }

@@ -4,8 +4,8 @@ import { Header } from '../components/Header'
 import { rihanna } from '../Images/ImageUrls'
 import { useState } from 'react'
 import Axios from '../lib/api/axios'
+import { TokenInput } from '../components/TokenInput'
 
-export const VerificationPage = () => {
 
 const Container = styled.div`
 width: 100%;
@@ -135,20 +135,22 @@ const Value = styled.div`
 `
 
 
+
+export const VerificationPage = () => {
+
 const [verificationToken, setVerificationToken] = useState("");
 
-const tokenRef = useRef(null);
 const [verifiedUser, setVerifiedUser] = useState(null);
 
+console.log(verificationToken)
 
 const handleVerify = async (e) => {
 e.preventDefault();
-const token = tokenRef.current.value;
     try{
     const res = await Axios.post(
         "/identity/verify",
         {
-            key: token
+            key: verificationToken
         }
     )
     console.log(res);
@@ -161,7 +163,7 @@ const token = tokenRef.current.value;
 
     
   return (
-    <>
+    
     <Container>
         <Header/>
         <Wrapper>
@@ -189,22 +191,19 @@ const token = tokenRef.current.value;
             </Right>
             <hr></hr>
             <Left>
-                <Title>Verify an Identity</Title>
+                <Title>Verify an identity</Title>
                 <Input>
-                    <Field
-                        type='text'
-                        placeholder='Email'
-                        value={verificationToken}
-                        // ref={tokenRef}
-                        onChange={(e) => setVerificationToken(e.target.value)}
-                    />
-                    <Button
-                    onClick={handleVerify}
-                    >Verify</Button>
+                <Field
+                type='text'
+                placeholder='Input a token'
+                onChange={(e) => setVerificationToken(e.target.value)}
+                />
+                <Button
+                onClick={handleVerify}
+                >Verify</Button>
                 </Input>
             </Left>
         </Wrapper>
     </Container>
-    </>
   )
 }

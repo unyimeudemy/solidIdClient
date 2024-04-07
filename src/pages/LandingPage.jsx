@@ -29,21 +29,6 @@ export const LandingPage = () => {
         background-repeat: no-repeat;
     `
     
-const Section2 = styled.div`
-    height: 70vh;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap:50px;
-`
-
-const Section3 = styled.div`
-height: 100vh;
-width: 100%;
-background-color: blue;
-`
 const Section4 = styled.div`
 height: 100vh;
 width: 100%;
@@ -138,7 +123,6 @@ const  SigUpButton = styled.button`
 
 const navigate = useNavigate();
 const {currentUser} = useSelector((state) => state.user);
-console.log("currentUser: ", currentUser);
 
   return (
     <Container>
@@ -150,7 +134,7 @@ console.log("currentUser: ", currentUser);
             </HeadLine>
             <Buttons>
 
-            { currentUser ?
+            { currentUser != null ?
                  <Button
                  onClick={() => navigate("/verify")}
                  >Verify Identity</Button> :
@@ -162,13 +146,6 @@ console.log("currentUser: ", currentUser);
             </Buttons>
             </Left>
         </Section1>
-        <Section2>
-            <Body>
-                <Title>What we do</Title>
-            </Body>
-            <WhatWeDoPic/>
-        </Section2>
-        <Section3></Section3>
         <Section4></Section4>
     </Container>
   )

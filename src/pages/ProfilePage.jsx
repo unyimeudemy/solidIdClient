@@ -1,18 +1,21 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Header } from '../components/Header'
 import { rihanna } from '../Images/ImageUrls'
 import { AccountList } from '../components/AccountList.jsx';
+import {useSelector, useDispatch} from "react-redux"
+import { removeOrg } from '../redux/slices/orgChoosenSlice.js';
+import Axios from '../lib/api/axios.js';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 export const ProfilePage = () => {
     const Container = styled.div`
-    width: 100%;
-    height: 100%;
-    background-color: transparent;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+        align-items: center;
+        gap: 5px;
     `
     
     const Wrapper = styled.div`
@@ -138,11 +141,79 @@ const Field = styled.div`
 
 `;
 
+const Token = styled.div`
+    height: 45px;
+    background-color: #EEEEEE;
+    border: none;
+    font-size: 20px;
+    width: 200px;
+    font-weight: 400;
+      cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #395e60;
+`
+
+const Next = styled.div`
+    width: 100%;
+    height: 250px;
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    /* justify-content: center; */
+    margin-top: 50px;
+`
+
+const Others = styled.div`
+    width: 100%;
+    height: 40px;
+    background-color: transparent;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+`
+
+const Text = styled.div`
+    font-size: 20px;
+    font-weight: 600;
+    color: #222831;
+`
+
 const [organizationList, setOrganizationList] = useState(false);
+const [displayToken, setDisplayToken] = useState(true);
+const [currentUserProfile, setCurrentUserProfile] = useState({});
+
+const dispatch = useDispatch();
+
+
+const addedOrg  = useSelector((state) => state.orgChoosen);
+
+const handleGenerate = () => {
+    setDisplayToken(!displayToken);
+    dispatch(removeOrg());
+}
+
+useEffect(() => {
+
+    const getProfileDetail = async () => {
+        const res = await Axios.get("/user/profile");
+        setCurrentUserProfile(res.data);
+    }
+
+    getProfileDetail()
+}, [])
+
+const {firstName, lastName, stateOfOrigin} = currentUserProfile;
+
+
 
     
       return (
-        <>
+        
         <Container>
             <Header/>
             <Wrapper>
@@ -152,34 +223,49 @@ const [organizationList, setOrganizationList] = useState(false);
                     </Box>
                     <ProfilePic src={rihanna} alt='Rihanna'/>
                     <Box2>
-                        <Key>Key: </Key>
-                        <Value>Value value</Value>
+                        <Key>First name: </Key>
+                        <Value>{firstName}</Value>
                     </Box2>
                     <Box2>
-                        <Key>Key: </Key>
-                        <Value>Value value</Value>
+                        <Key>Last name: </Key>
+                        <Value>{lastName}</Value>
                     </Box2>
                     <Box2>
-                        <Key>Key: </Key>
-                        <Value>Value value</Value>
+                        <Key>State of origin: </Key>
+                        <Value>{stateOfOrigin}</Value>
                     </Box2>
                 </Right>
                 <hr></hr>
                 <Left>
                     <Title>Generate token</Title>
                     <Input>
+                        {displayToken ? 
                         <Field
                         onClick={() => {setOrganizationList(!organizationList)}}
-                        >Choose account</Field>
+                        >Choose profile</Field>:
+                    <Token>{addedOrg.org != null ? addedOrg.org : "Click generate"}</Token>
+                    }
                         { organizationList && <AccountList 
                         organizationList = {organizationList}
                         setOrganizationList = {setOrganizationList}
+                        displayToken={displayToken}
+                        setDisplayToken={setDisplayToken}
                         />}
-                        <Button>Generate</Button>
+                        <Button
+                        onClick={() => handleGenerate()}
+                        >Generate</Button>
                     </Input>
+                    <Next>
+                        <Others>
+                            <AccessTimeIcon color='red'/>
+                            <Text>History</Text>
+                        </Others>
+                        <Others></Others>
+                        <Others></Others>
+                    </Next>
                 </Left>
             </Wrapper>
         </Container>
-        </>
+        
       )
 }

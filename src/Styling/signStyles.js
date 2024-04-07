@@ -7,6 +7,7 @@ flex-direction: column;
 align-items: center;
 justify-content: center;
 padding: 90px;
+background-color: #EEEEEE;
 /* margin-top: 50px; */
 `
 
@@ -55,11 +56,12 @@ export const Buttons = styled.div`
     flex-direction: row;
     justify-content: space-around;
     gap: 150px;
+    width: 80%;
+    height: 35px;
 `
 
 export const Button = styled.button`
     border-radius: 10px;
-  width: 100px;
   color: white;
   padding: 5px 15px;
   border: 1px solid #3f4a5a;
@@ -74,7 +76,9 @@ export const Button = styled.button`
   justify-content: center;
   gap: 5px;
   font-weight: 700;
-  height: 40px;
+  height: 60px;
+  width: 100%;
+
   margin-bottom: 20px;
 `;
 

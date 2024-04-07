@@ -1,14 +1,21 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import  Microsoft  from '../Images/Microsoft.png'
 import  google  from '../Images/google.png'
 import  facebook  from '../Images/facebook.png'
+import Axios from '../lib/api/axios';
+import {useSelector, useDispatch} from "react-redux";
+import { addOrg } from '../redux/slices/orgChoosenSlice';
+
 
 
 
 export const AccountList = ({
     organizationList,
-    setOrganizationList
+    setOrganizationList,
+    displayToken,
+    setDisplayToken
+   
 }) => {
 
 const Container = styled.div`
@@ -24,6 +31,30 @@ const Container = styled.div`
     padding: 10px;
     z-index: 3;
   `;
+
+
+// const MenuContainer = styled.div`
+//   display: flex;
+//   overflow-x: scroll;
+//   -webkit-overflow-scrolling: touch;
+//   /* width: 300px; */
+//   width: auto;
+//   border-radius: 5px;
+//   height: 35px;
+//   background-color: transparent;
+//   /* border: 1px solid #3ea6ff; */
+//   gap: 7px;
+//   padding: 2px;
+
+  /* @media only screen and (min-width: 425px) {
+    /* display: none; */
+    /* width: 900px;
+    height: 50px;
+    ::-webkit-scrollbar {
+      display: none; */
+    /* } */
+  /* } */ 
+// `;
 
 const Wrapper = styled.div`
     width: 350px;
@@ -54,6 +85,9 @@ const List = styled.div`
     flex-direction: column;
     width: 100%;
     height: 400px;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    overflow-x: hidden;
 
 `
 const Hr = styled.hr`
@@ -106,35 +140,82 @@ const CloseButton = styled.div`
   align-items: center;
   justify-content: center;
   gap: 5px;
+  margin-top: 10px;
 `
+
+const Item = styled.div`
+   width: 100%;
+   height: 100%;
+`
+
+const [orgList, setOrgList] = useState([]);
+
+const dispatch = useDispatch();
+
+useEffect(() => {
+  const handleOrganizationList = async () => {
+    try{
+        const res = await Axios.get("/user/users-orgs");
+        setOrgList(res.data);
+
+    }catch(error){
+        console.log(error);
+    }
+}
+    handleOrganizationList()
+}, [])
+
+
+    const  handleItemClicked = (orgEmail) => {
+        setOrganizationList(!organizationList);
+            const handleGenerate = async () => {
+                try{
+                const res = await Axios.post(
+                    "/identity/generate",
+                    {
+                        orgEmail : orgEmail
+                    }
+                )
+                console.log(res.data)
+                dispatch(addOrg(res.data));
+                
+            }catch(error){
+                console.log(error);
+            }
+            }
+            handleGenerate();
+            setDisplayToken(!displayToken);
+    }
+
+
 
   return (
     <Container>
         <Wrapper>
-            <Title>Organizations</Title>
+            <Title>Profiles</Title>
             <List>
             <Hr/>
-            <ListItem 
-            onClick={() => {setOrganizationList(!organizationList)}}
-            >
-                <Logo src={Microsoft} alt='Microsoft'/>
-                <OrganizationName>Microsoft</OrganizationName>
-            </ListItem>
-            <Hr/>
-            <ListItem
-            onClick={() => {setOrganizationList(!organizationList)}}
-            >
-            <Logo src={google} alt='Google'/>
-            <OrganizationName>Google</OrganizationName>
-            </ListItem>
-            <Hr/>
-            <ListItem
-            onClick={() => {setOrganizationList(!organizationList)}}
-            >
-            <Logo src={facebook} alt='Facebook'/>
-            <OrganizationName>Facebook</OrganizationName>
-            </ListItem>
-            <Hr/>
+                    <ListItem 
+                        onClick={() => handleItemClicked("Profile")}
+                    >
+                        <Logo src={Microsoft} alt='Microsoft'/>
+                        <OrganizationName>My profile</OrganizationName>
+                    </ListItem>
+                {
+                    orgList?.map((org) =>( 
+                    <Item key={org.id} >
+                    <Hr/>
+                    <ListItem 
+                        onClick={() => handleItemClicked(org.orgEmail)}
+                    >
+                        <Logo src={Microsoft} alt='Microsoft'/>
+                        <OrganizationName>{org.orgName}</OrganizationName>
+                    </ListItem>
+                    <Hr/>
+                    </Item>
+                    )
+                )
+                }
             </List>
             <CloseButton
             onClick={() => {setOrganizationList(!organizationList)}}

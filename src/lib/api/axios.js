@@ -8,7 +8,6 @@ const Axios = axios.create({
 Axios.interceptors.request.use(
     (config) => {
         const AccessToken = Cookies.get("AccessToken");
-        console.log("AccessToken: ",  "Bearer " +  AccessToken);
         if(AccessToken){
             config.headers = {
                 Authorization: "Bearer " + AccessToken,
