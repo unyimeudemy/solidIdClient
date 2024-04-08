@@ -16,14 +16,12 @@ import { LogoutPage } from "./pages/LogoutPage.jsx";
 import { OrgSignUpPage } from "./pages/OrgSignUpPage.jsx";
 import { OrgSignInPage } from "./pages/OrgSignInPage.jsx";
 
-
-
-function App() {
-
 const Container = styled.div`
     background-color: #EEEEEE;
     height: 100vh;
 `
+
+function App() {
 
   return (
     <BrowserRouter basename ="/">

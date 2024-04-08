@@ -114,7 +114,6 @@ export const OrgSignInPage = () => {
             )
             const AccessToken = res.data.token;
             Cookies.set("AccessToken", AccessToken, {expires: 7 * 4 * 3});
-            console.log(AccessToken);
             const userDetail = await getOrgProfile(AccessToken);
             dispatch(loginSuccess(userDetail.data));
             navigate("/");
@@ -124,8 +123,7 @@ export const OrgSignInPage = () => {
         }
     }
 
-    const {user }= useSelector((state) => state.user);
-    console.log(user);
+
 
   return (
     <Wrapper>

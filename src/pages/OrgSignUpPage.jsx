@@ -4,9 +4,9 @@ import { SolidIDLogo } from '../components/SolidIDLogo';
 import Axios from '../lib/api/axios';
 import Cookies from "js-cookie"
 import {useNavigate} from "react-router-dom"
-import { getUserProfile } from '../lib/getUserProfile';
 import {useSelector, useDispatch} from "react-redux"
 import { loginSuccess } from '../redux/slices/userSlice';
+import { getOrgProfile } from '../lib/getOrgProfile';
 
 
 
@@ -99,6 +99,7 @@ export const OrgSignUpPage = () => {
     const [baseAccEmail, setBaseAccEmail] = useState("")
     const [baseAccPassword, setBaseAccPassword] = useState("")
     const [orgName, setOrgName] = useState("")
+    const [role, setRole] = useState("")
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -114,15 +115,16 @@ export const OrgSignUpPage = () => {
                     password: orgPassword,
                     repEmail: baseAccEmail,
                     repPassword: baseAccPassword,
-                    organizationName: orgName
+                    organizationName: orgName,
+                    role: role
                 }
             )
+ 
             const AccessToken = res.data.token;
             Cookies.set("AccessToken", AccessToken, {expires: 7 * 4 * 3});
-            // const userDetail = await getUserProfile();
-            // dispatch(loginSuccess(userDetail.data));
+            const userDetail = await getOrgProfile(AccessToken);
+            dispatch(loginSuccess(userDetail.data));
             navigate("/");
-
         }catch(error){
             console.log(error);
         }
@@ -171,6 +173,12 @@ export const OrgSignUpPage = () => {
             type='text'
             placeholder='Organzation name'
         onChange={(e) => setOrgName(e.target.value)}
+
+        />
+        <Input
+            type='text'
+            placeholder='USER or ORG'
+        onChange={(e) => setRole(e.target.value)}
 
         />
         </>
