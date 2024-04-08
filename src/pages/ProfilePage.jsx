@@ -11,6 +11,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import PeopleIcon from '@mui/icons-material/People';
+import { AddMemberForm } from '../components/AddMemberForm.jsx'
 
 
 const Container = styled.div`
@@ -388,6 +389,7 @@ const handleAllMembersClicked = async () => {
                             <Box>
                                 <DetailHeader>Add a member</DetailHeader>
                             </Box>
+                            <AddMemberForm/>
                            
                         </Right>
                         )
